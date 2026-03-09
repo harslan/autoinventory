@@ -59,7 +59,7 @@ def compute_order(day, product, sales_history, order_history):
         if dt == 0:
             est = max(est * 7.5, 220)
         elif dt == 1:
-            est *= 4.3
+            est *= 4.4
         elif dt == 2:
             est *= 1.05
         elif dt == -1:
