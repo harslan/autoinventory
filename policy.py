@@ -109,8 +109,14 @@ def compute_order(day, product, sales_history, order_history):
     elif product == 'roses' and MOTHERS_DAY - day == -1:
         est *= 2.6
 
+    # Memorial Day weekend (day 147 = last Mon of May, days 145-146 = Sat/Sun before)
+    if product == 'roses' and day in (145, 146):
+        est *= 1.3
+    elif product == 'tulips' and day in (145, 146):
+        est *= 1.3
+
     # St. Patrick's Day (day 75 = March 17)
-    if product == 'roses' and day == 75:
+    elif product == 'roses' and day == 75:
         est *= 1.5
     elif product == 'tulips' and day == 76:
         est *= 1.5
