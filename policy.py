@@ -107,6 +107,12 @@ def compute_order(day, product, sales_history, order_history):
     elif product == 'roses' and MOTHERS_DAY - day == -1:
         est *= 2.6
 
+    # St. Patrick's Day (day 75 = March 17)
+    if product == 'roses' and day == 75:
+        est *= 1.5
+    elif product == 'tulips' and day == 76:
+        est *= 1.5
+
     # Spring ramp-up (Apr-May: days 90-129) - all products
     if 60 <= day <= 150:
         est *= 1.05
