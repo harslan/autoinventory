@@ -1,16 +1,17 @@
 """
 prepare.py — Fixed simulation engine. Do not modify.
 
-Equivalent to Karpathy's prepare.py in autoresearch.
-Generates ground-truth demand, computes the Oracle bound,
+Loads pre-computed demand data, computes the Oracle bound,
 and provides the run_simulation() harness that scores any policy.
 
-The agent never sees TRUE_DEMAND directly.
+The policy never sees TRUE_DEMAND directly.
 It only observes min(ordered, true_demand) each day — censored data.
 """
 
 import numpy as np
 import warnings
+import zlib
+import base64
 
 # ── Products & economics ──────────────────────────────────────────────────────
 PRODUCTS = ['roses', 'tulips', 'orchids', 'sunflowers', 'lilies']
@@ -19,51 +20,48 @@ COST  = {'roses': 8,  'tulips': 4,  'orchids': 15, 'sunflowers': 3,  'lilies': 4
 PRICE = {'roses': 25, 'tulips': 14, 'orchids': 45, 'sunflowers': 10, 'lilies': 13}
 BASE  = {'roses': 25, 'tulips': 20, 'orchids': 8,  'sunflowers': 15, 'lilies': 18}
 
-# ── Generate 365 days of TRUE demand (hidden from policy) ─────────────────────
-# Fixed seed — deterministic for everyone. Same policy = same profit. Always.
-_rng = np.random.default_rng(42)
-TRUE_DEMAND: dict[str, list[int]] = {p: [] for p in PRODUCTS}
-
-for _day in range(365):
-    _dow     = _day % 7
-    _weekend = (_dow >= 5)
-
-    for _product in PRODUCTS:
-        _d = float(BASE[_product])
-
-        if _weekend:
-            _d *= 1.6
-
-        # Seasonal & special days
-        if _product == 'roses':
-            if   _day == 44:              _d *= 9.0   # Valentine's Day
-            elif _day == 43:              _d *= 4.0   # Valentine's Eve
-            elif _day == 45:              _d *= 3.0   # Day after
-            elif _day == 133:             _d *= 4.5   # Mother's Day
-            elif 120 <= _day <= 145:      _d *= 1.3   # Spring
-        elif _product == 'tulips':
-            if   _day == 44:              _d *= 4.0
-            elif _day == 133:             _d *= 3.0
-            elif 60 <= _day <= 150:       _d *= 1.4
-        elif _product == 'orchids':
-            if   _day == 44:              _d *= 2.5
-            elif _day == 133:             _d *= 3.5
-            elif _day == 357:             _d *= 2.0
-        elif _product == 'sunflowers':
-            if   150 <= _day <= 240:      _d *= 2.2
-            elif _day == 133:             _d *= 1.8
-        elif _product == 'lilies':
-            if   _day == 133:             _d *= 4.0   # Mother's Day
-            elif _day == 44:              _d *= 2.0
-            elif _day == 357:             _d *= 2.5
-
-        # Demand growth (~10% YoY)
-        _d *= (1 + 0.10 * _day / 365)
-
-        # Random noise
-        _noise = _rng.normal(0, _d * 0.18)
-        _d = max(0, int(round(_d + _noise)))
-        TRUE_DEMAND[_product].append(_d)
+# ── Pre-computed demand (365 days × 5 products, deterministic) ────────────────
+# Same policy = same profit. Always.
+_BLOB = (
+    "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"
+    "ln4zd/8D8ZmkXg=="
+)
+_arr = np.frombuffer(
+    zlib.decompress(base64.b64decode(_BLOB)), dtype=np.int16
+).reshape(len(PRODUCTS), 365)
+TRUE_DEMAND: dict[str, list[int]] = {
+    p: _arr[i].tolist() for i, p in enumerate(PRODUCTS)
+}
 
 # ── Oracle: order exactly true demand every day (theoretical upper bound) ─────
 ORACLE_PROFIT: float = sum(
@@ -73,10 +71,7 @@ ORACLE_PROFIT: float = sum(
 )
 
 
-
 # ── Censoring ceiling (theoretical maximum under passive observation) ──────────
-# A policy that observes true demand on non-stockout days, None otherwise.
-# No explore-exploit — purely reactive to what censored information reveals.
 # The gap between this and ORACLE_PROFIT is IRREDUCIBLE:
 #   it is the permanent cost of never observing demand when you stocked out.
 def _compute_censoring_ceiling() -> float:
@@ -91,10 +86,8 @@ def _compute_censoring_ceiling() -> float:
             _known = [x for x in true_hist[_p] if x is not None]
             if len(_known) >= 3:
                 _est = float(np.mean(_known[-14:]))
-                # Naive weekend boost (only thing it can infer from day number)
                 if _wknd:
                     _est *= 1.5
-                # Inflate for recent stockouts — knows demand was > order
                 _recent = true_hist[_p][-14:]
                 _n_so   = sum(1 for x in _recent if x is None)
                 _n_tot  = max(1, len(_recent))
@@ -180,7 +173,7 @@ def run_simulation(policy_code: str, verbose: bool = False) -> float:
             order_hist[product].append(qty)
 
     # If the policy crashed on more than 10% of calls, it is effectively broken.
-    # Return -inf so the agent gets an honest signal rather than a misleading $392K.
+    # Return -inf so the agent gets an honest signal rather than a misleading profit.
     if n_exceptions / n_calls > 0.10:
         if verbose:
             print(f"  ✗ Policy crashed on {n_exceptions}/{n_calls} calls ({n_exceptions/n_calls*100:.0f}%) — treating as -inf")
@@ -192,7 +185,7 @@ def run_simulation(policy_code: str, verbose: bool = False) -> float:
 if __name__ == '__main__':
     print("prepare.py — AutoInventory simulation engine")
     print(f"  Products      : {PRODUCTS}")
-    print("  Horizon       : 365 days  (fixed seed=42)")
+    print("  Horizon       : 365 days")
     print(f"  Oracle profit : ${ORACLE_PROFIT:>12,.0f}  (perfect information upper bound)")
 
     # Quick sanity check

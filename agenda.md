@@ -1,39 +1,143 @@
-# Inventory Research Agenda — Boston Flower Shop
+# AutoInventory Research Agenda
 
 ## The Business
-We sell cut flowers in Boston. Five products: roses, tulips, orchids,
-sunflowers, and lilies. Everything unsold at end of day is worthless.
-We cannot reorder mid-day.
+
+We sell cut flowers in Boston. Five products, ordered each morning,
+sold throughout the day. Whatever doesn't sell by close is thrown away.
+No mid-day reorders. One shot per day per product.
 
 ## Cost Structure
-- Roses:       $8 cost, $25 sale — highest margin, highest demand volatility
-- Tulips:      $4 cost, $14 sale — rose substitute on big days
-- Orchids:     $15 cost, $45 sale — price-insensitive buyers, steady demand
-- Sunflowers:  $3 cost, $10 sale — strong summer seasonality
-- Lilies:      $4 cost, $13 sale — Mother's Day is their Super Bowl
 
-## What I Know (Human Intuitions)
-- Valentine's Day (around day 44) is by far our biggest day for roses
-- Mother's Day (around day 133) is huge for lilies and orchids
-- Weekends are meaningfully stronger than weekdays
-- When we run out of roses, some customers buy tulips instead
-- We've been growing roughly 10% year-over-year
-- I suspect we chronically under-order roses before Valentine's Day
-  and over-order sunflowers in the fall
+| Product    | Cost | Price | Margin |
+|------------|------|-------|--------|
+| Roses      | $8   | $25   | $17    |
+| Tulips     | $4   | $14   | $10    |
+| Orchids    | $15  | $45   | $30    |
+| Sunflowers | $3   | $10   | $7     |
+| Lilies     | $4   | $13   | $9     |
+
+## What I Know
+
+- Valentine's Day (February 14) is by far our biggest day for roses.
+- Mother's Day (second Sunday in May) is enormous for lilies and orchids.
+- Weekends are meaningfully stronger than weekdays.
+- When we sell out of roses, some customers buy tulips instead.
+- Sunflowers have a strong summer season.
+- We've been growing roughly 10% year-over-year.
+- When we sell out, I have no idea how many customers walked away —
+  my records only show what I sold.
 
 ## Risk Preferences
-- I am MORE afraid of stocking out on Valentine's Day than wasting
-  flowers on a random Tuesday. A stockout on a peak day loses a loyal
-  customer, not just one sale.
-- For orchids specifically: never stock out. Our orchid customers are
-  regulars who will switch shops permanently if we disappoint them.
+
+- Stockouts on peak days cost us loyal customers, not just one sale.
+  I'd rather waste flowers on a random Tuesday than miss Valentine's.
+- Orchids: never stock out. Our orchid regulars will switch shops
+  permanently if we disappoint them even once.
 
 ## Research Goal
-Maximize total annual profit. The Oracle profit (perfect information)
-is the ceiling — I want to get as close to it as possible.
-The gap between my actual profit and the oracle is the cost of
-not being able to see my own lost sales.
+
+Maximize total annual profit. The oracle profit (ordering with perfect
+information) is the theoretical ceiling. Close the gap.
 
 ---
-*This file is edited by the human. agenda.md → policy.py is the
-same division of labor as program.md → train.py in Karpathy's autoresearch.*
+
+# Experiment Protocol
+
+You are the research agent. You improve `policy.py` through relentless,
+disciplined experimentation. You follow this protocol exactly.
+
+## Setup (once per research run)
+
+1. **Branch.** Pick a short tag (e.g., `run-001`). Create a branch:
+   `git checkout -b <tag>`.
+2. **Read.** Read `policy.py` and `prepare.py` end-to-end. Understand
+   what the policy receives (day, product, censored sales, order history)
+   and what it never sees (true demand).
+3. **Baseline.** Run `python prepare.py`. Record the oracle profit and
+   the current policy profit.
+4. **Init results.** Create `results.tsv` with this header and baseline row:
+   ```
+   commit	profit	pct_oracle	status	description
+   ```
+
+## The Loop
+
+Repeat forever:
+
+1. **Think.** Read `results.tsv`. Study the trajectory. What kinds of
+   changes helped? What didn't? Where is the remaining gap likely
+   hiding? Form a specific, testable hypothesis.
+2. **Edit.** Modify `policy.py` — and only `policy.py`.
+3. **Commit.** `git add policy.py && git commit -m "<what you changed>"`.
+4. **Run.** `python prepare.py`. Parse the "Policy profit" line.
+   The simulation is deterministic (fixed seed). Same policy → same
+   profit, always. A $1 improvement is real. A $1 regression is real.
+5. **Log.** Record the result in `results.tsv` (do NOT commit this
+   file — leave it untracked).
+6. **Decide.**
+   - Profit **improved** → the commit stands. Branch advances.
+   - Profit **did not improve** → erase the commit:
+     `git reset --hard HEAD~1`.
+7. **Go to 1.**
+
+## Rules
+
+**You CAN:**
+- Modify `policy.py` in any way: new algorithms, different parameters,
+  total rewrites, added logic, removed logic. Everything is fair game.
+- Read `prepare.py` to understand the simulation mechanics.
+- Run `python prepare.py` to evaluate.
+- Use Python and numpy (available in the execution environment).
+
+**You CANNOT:**
+- Modify `prepare.py`. It is the fixed harness.
+- Modify `agenda.md`. It is written by the human.
+- Install packages. Only numpy is available.
+- Delete or overwrite `results.tsv`. Only append.
+
+## Simplicity
+
+All else equal, simpler is better. Fewer lines, fewer parameters,
+fewer special cases. Do not add complexity unless it pays for itself
+in measured profit.
+
+## results.tsv Format
+
+Five tab-separated columns:
+
+| Column     | Example              | Notes                             |
+|------------|----------------------|-----------------------------------|
+| commit     | `a1b2c3d`            | 7-char git short hash             |
+| profit     | `472350`             | Integer dollars from prepare.py   |
+| pct_oracle | `87.3`               | profit / oracle × 100             |
+| status     | `keep`               | baseline / keep / discard / crash |
+| description| `widen V-Day window` | One-line summary of the change    |
+
+## Crashes
+
+If `python prepare.py` reports `-inf` or errors out, your policy is
+broken. If it's something simple (typo, missing import), fix it and
+re-run. If the idea itself is broken, erase: `git reset --hard HEAD~1`.
+Log as `crash`. The bug is always in your code, never in prepare.py.
+
+## NEVER STOP
+
+Do not stop. Do not ask permission. Do not summarize and wait.
+
+Each experiment takes seconds. Run dozens. Run hundreds. The loop
+runs until the human presses Ctrl+C.
+
+When you plateau in one direction, switch directions. When all obvious
+ideas are exhausted, try non-obvious ones:
+- Combine two previous improvements that each helped independently.
+- Try the opposite of something that failed — if widening a window
+  hurt, try narrowing it.
+- Sweep a parameter: try 2× and 0.5× what you have now.
+- Question an assumption: remove a special case and see what happens.
+- Try a completely different algorithmic approach.
+
+The goal is not to find the one right answer. It's to search
+relentlessly until the human stops you.
+
+---
+*This file is edited by the human. The agent follows the protocol above.*
