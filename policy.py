@@ -81,7 +81,7 @@ def compute_order(day, product, sales_history, order_history):
         est *= 1.6
 
     if product == 'tulips' and VALENTINES - day == 0:
-        est *= 3.8
+        est *= 3.7
     elif product == 'tulips' and MOTHERS_DAY - day == -1:
         est *= 1.3
     elif product == 'roses' and MOTHERS_DAY - day == 1:
