@@ -59,7 +59,9 @@ def compute_order(day, product, sales_history, order_history):
             est = max(est * 8.0, 220)
         elif dt == 1:
             est *= 4.5
-        elif -1 <= dt <= 2:
+        elif dt == 2:
+            est *= 2.0
+        elif -1 <= dt <= 1:
             est *= 2.7
 
     if product in ('orchids', 'lilies') and VALENTINES - day == 0:
