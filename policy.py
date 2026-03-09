@@ -62,8 +62,6 @@ def compute_order(day, product, sales_history, order_history):
         dm = MOTHERS_DAY - day
         if dm == 0:
             est *= 3.0
-        elif -2 <= dm <= 3:
-            est *= 1.8
 
     # Summer sunflower boost (Jun 1 - Aug 31: days 151-242)
     if product == 'sunflowers' and 151 <= day <= 242:
