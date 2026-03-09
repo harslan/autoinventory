@@ -64,6 +64,10 @@ def compute_order(day, product, sales_history, order_history):
         if dm == 0:
             est *= 3.0
 
+    # Spring ramp-up (Apr-May: days 90-129) - all products
+    if 90 <= day <= 129:
+        est *= 1.05
+
     # Summer transition boost for sunflowers (Jun 1-15 only: days 151-165)
     if product == 'sunflowers' and 151 <= day <= 165:
         est *= 1.6
