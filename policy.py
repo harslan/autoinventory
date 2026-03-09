@@ -92,6 +92,8 @@ def compute_order(day, product, sales_history, order_history):
         est *= 1.3
     elif product == 'tulips' and MOTHERS_DAY - day == -1:
         est *= 1.3
+    elif product == 'roses' and MOTHERS_DAY - day == 6:
+        est *= 1.3
     elif product == 'roses' and MOTHERS_DAY - day == 3:
         est *= 1.05
     elif product == 'roses' and MOTHERS_DAY - day == 2:
