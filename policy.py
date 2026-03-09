@@ -32,7 +32,7 @@ def compute_order(day, product, sales_history, order_history):
             g_s = [sales_history[i] for i in grp_idx[-15:]]
             g_o = [order_history[i] for i in grp_idx[-15:]]
             n_so = sum(s >= o for s, o in zip(g_s, g_o))
-            inf_k = 0.25 if product == 'orchids' else 0.3
+            inf_k = 0.2 if product == 'orchids' else 0.3
             inflate = 1.0 + inf_k * n_so / len(g_s)
             alpha = 0.3 if product == 'sunflowers' else 0.1
             w = np.exp(alpha * np.arange(len(g_s)))
