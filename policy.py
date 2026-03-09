@@ -9,9 +9,9 @@ MOTHERS_DAY = 132  # 2nd Sunday in May (May 13)
 EXCL = {
     'roses': set(range(VALENTINES - 2, VALENTINES + 3)),       # 42-46
     'tulips': set(),
-    'orchids': set(range(MOTHERS_DAY - 2, MOTHERS_DAY + 3)),  # 130-134
+    'orchids': set(range(MOTHERS_DAY - 3, MOTHERS_DAY + 4)),  # 130-134
     'sunflowers': set(),
-    'lilies': set(range(MOTHERS_DAY - 2, MOTHERS_DAY + 3)),   # 130-134
+    'lilies': set(range(MOTHERS_DAY - 3, MOTHERS_DAY + 4)),   # 130-134
 }
 
 
