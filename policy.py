@@ -69,6 +69,6 @@ def compute_order(day, product, sales_history, order_history):
         est *= 1.6
     # Post-summer dampener for sunflowers (Sep: days 243-260)
     elif product == 'sunflowers' and 243 <= day <= 260:
-        est *= 0.85
+        est *= 0.8
 
     return max(0, min(600, int(round(est))))
