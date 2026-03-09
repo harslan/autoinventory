@@ -44,7 +44,7 @@ def compute_order(day, product, sales_history, order_history):
             inflate = 1.0 + 0.3 * n_so / max(1, len(r_s))
             est = float(np.mean(r_s)) * inflate if r_s else float(BASE[product])
             if is_weekend:
-                est *= 1.5
+                est *= 1.4
     else:
         # Cold-start: use slightly higher defaults to reduce early stockouts
         cold = {'roses': 26, 'tulips': 24, 'orchids': 10, 'sunflowers': 18, 'lilies': 22}
