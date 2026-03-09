@@ -50,12 +50,15 @@ disciplined experimentation. You follow this protocol exactly.
 
 1. **Branch.** Pick a short tag (e.g., `run-001`). Create a branch:
    `git checkout -b <tag>`.
-2. **Read.** Read `policy.py` and `prepare.py` end-to-end. Understand
+2. **Read prior work.** Check other branches for `session-report.md`
+   files from previous runs. Read them for inspiration — what worked,
+   what didn't, what directions were suggested.
+3. **Read.** Read `policy.py` and `prepare.py` end-to-end. Understand
    what the policy receives (day, product, censored sales, order history)
    and what it never sees (true demand).
-3. **Baseline.** Run `python prepare.py`. Record the oracle profit and
+4. **Baseline.** Run `python prepare.py`. Record the oracle profit and
    the current policy profit.
-4. **Init results.** Create `results.tsv` with this header and baseline row:
+5. **Init results.** Create `results.tsv` with this header and baseline row:
    ```
    commit	profit	pct_oracle	status	description
    ```
@@ -138,6 +141,22 @@ ideas are exhausted, try non-obvious ones:
 
 The goal is not to find the one right answer. It's to search
 relentlessly until the human stops you.
+
+## Session Report
+
+When the human tells you to stop or says "wrap up", write a session
+report before ending. Create `session-report.md` on the branch:
+
+- Run tag and branch name
+- Starting profit → ending profit (and pct_oracle)
+- Number of experiments (keeps / discards / crashes)
+- Key discoveries: what changes had the biggest impact?
+- Failed directions: what didn't work and why?
+- Suggested next directions: what would you try next?
+
+Commit the report. This is the "paper" from your research run —
+the knowledge artifact that future agents (and humans) will read
+before starting their own run.
 
 ---
 *This file is edited by the human. The agent follows the protocol above.*
