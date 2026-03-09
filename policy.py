@@ -5,18 +5,28 @@ BASE = {'roses': 25, 'tulips': 20, 'orchids': 8, 'sunflowers': 15, 'lilies': 18}
 VALENTINES = 44    # Feb 14
 MOTHERS_DAY = 132  # 2nd Sunday in May (May 13)
 
+# Special-event days to exclude from each product's history (outliers that distort estimates)
+EXCL = {
+    'roses': {VALENTINES},
+    'tulips': set(),
+    'orchids': {MOTHERS_DAY},
+    'sunflowers': set(),
+    'lilies': {MOTHERS_DAY},
+}
+
 
 def compute_order(day, product, sales_history, order_history):
     n = len(sales_history)
     dow = day % 7
     is_weekend = dow >= 5
+    excl = EXCL[product]
 
-    # --- Demand estimate: group weekdays/weekends together ---
+    # --- Demand estimate: group weekdays/weekends, exclude holiday outliers ---
     if n >= 7:
         if is_weekend:
-            grp_idx = [i for i in range(n) if i % 7 >= 5]
+            grp_idx = [i for i in range(n) if i % 7 >= 5 and i not in excl]
         else:
-            grp_idx = [i for i in range(n) if i % 7 < 5]
+            grp_idx = [i for i in range(n) if i % 7 < 5 and i not in excl]
 
         if len(grp_idx) >= 3:
             g_s = [sales_history[i] for i in grp_idx[-10:]]
@@ -25,11 +35,12 @@ def compute_order(day, product, sales_history, order_history):
             inflate = 1.0 + 0.3 * n_so / len(g_s)
             est = float(np.mean(g_s)) * inflate
         else:
-            r_s = sales_history[-14:]
-            r_o = order_history[-14:]
+            r_idx = [i for i in range(n) if i not in excl][-14:]
+            r_s = [sales_history[i] for i in r_idx]
+            r_o = [order_history[i] for i in r_idx]
             n_so = sum(s >= o for s, o in zip(r_s, r_o))
-            inflate = 1.0 + 0.3 * n_so / len(r_s)
-            est = float(np.mean(r_s)) * inflate
+            inflate = 1.0 + 0.3 * n_so / max(1, len(r_s))
+            est = float(np.mean(r_s)) * inflate if r_s else float(BASE[product])
             if is_weekend:
                 est *= 1.5
     else:
@@ -52,7 +63,7 @@ def compute_order(day, product, sales_history, order_history):
         elif -2 <= dm <= 3:
             est *= 1.8
 
-    # Summer sunflower boost (Jun 1 – Aug 31: days 151–242)
+    # Summer sunflower boost (Jun 1 - Aug 31: days 151-242)
     if product == 'sunflowers' and 151 <= day <= 242:
         est *= 1.2
 
