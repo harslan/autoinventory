@@ -22,13 +22,13 @@ def compute_order(day, product, sales_history, order_history):
             g_s = [sales_history[i] for i in grp_idx[-10:]]
             g_o = [order_history[i] for i in grp_idx[-10:]]
             n_so = sum(s >= o for s, o in zip(g_s, g_o))
-            inflate = 1.0 + 0.5 * n_so / len(g_s)
+            inflate = 1.0 + 0.4 * n_so / len(g_s)
             est = float(np.mean(g_s)) * inflate
         else:
             r_s = sales_history[-14:]
             r_o = order_history[-14:]
             n_so = sum(s >= o for s, o in zip(r_s, r_o))
-            inflate = 1.0 + 0.5 * n_so / len(r_s)
+            inflate = 1.0 + 0.4 * n_so / len(r_s)
             est = float(np.mean(r_s)) * inflate
             if is_weekend:
                 est *= 1.5
