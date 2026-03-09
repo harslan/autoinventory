@@ -29,8 +29,8 @@ def compute_order(day, product, sales_history, order_history):
             grp_idx = [i for i in range(n) if i % 7 < 5 and i not in excl]
 
         if len(grp_idx) >= 3:
-            g_s = [sales_history[i] for i in grp_idx[-11:]]
-            g_o = [order_history[i] for i in grp_idx[-11:]]
+            g_s = [sales_history[i] for i in grp_idx[-13:]]
+            g_o = [order_history[i] for i in grp_idx[-13:]]
             n_so = sum(s >= o for s, o in zip(g_s, g_o))
             inflate = 1.0 + 0.3 * n_so / len(g_s)
             w = np.exp(0.1 * np.arange(len(g_s)))
