@@ -64,8 +64,8 @@ def compute_order(day, product, sales_history, order_history):
         if dm == 0:
             est *= 3.0
 
-    # Summer sunflower boost (Jun 1 - Aug 31: days 151-242)
-    if product == 'sunflowers' and 151 <= day <= 242:
-        est *= 1.2
+    # Summer transition boost for sunflowers (Jun 1-28 only: days 151-178)
+    if product == 'sunflowers' and 151 <= day <= 178:
+        est *= 1.4
 
     return max(0, min(600, int(round(est))))
