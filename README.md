@@ -2,20 +2,23 @@
 
 ![Profit trajectory across 639 experiments](progress.png)
 
-*For a century, a shop owner would wake up at 5 AM, stare at an empty cooler,
-and guess: how many roses today? Good instincts — built over decades — were the
-difference between thriving and going under. Then one night, an AI agent ran
-639 experiments while the owner slept. By morning it had tried more ideas than
-most florists try in a career. It was wrong 461 times. It didn't matter.
-The 178 times it was right added up to $99,000 in found profit. This repo
-is the story of that night.* — [@harslan](https://github.com/harslan), March 2026
+*Every morning, 30 million small businesses in America make the same bet: how
+much to order today. Too much and you eat the loss. Too little and you'll never
+know what you missed — the customer who found an empty shelf just leaves. For a
+century, the only tool was instinct. Someday soon, an owner will write a few
+paragraphs about their business, hand it to an AI, and go to sleep. By morning,
+the AI will have tested more ideas than the owner would try in a decade. It'll
+be wrong most of the time. It won't matter. This repo is a rough draft of that
+future.*
+— [@harslan](https://github.com/harslan), March 2026
 
 ---
 
-Every morning a flower shop places one order for the day. No second chances —
-whatever doesn't sell by closing is thrown in the trash. Order too many and
-you're composting money. Order too few and you'll never know: a customer who
-walks into an empty store doesn't leave a note.
+A Boston flower shop. Five products. One order placed each morning, no second
+chances. Whatever doesn't sell by closing is thrown in the trash.
+
+Order too many and you're composting money. Order too few and you'll never
+know — a customer who walks into an empty store doesn't leave a note.
 
 That last part is the real problem. **Your sales data is lying to you.** On the
 days you need it most — Valentine's Day, Mother's Day — you sell out early and
@@ -23,11 +26,10 @@ your records say "sold 50 roses." But maybe 200 people wanted them. You'll
 never know. And the worse you understock, the more your data tells you demand
 is low. It's a trap that gets tighter the longer you're in it.
 
-This repo is an experiment: give an AI agent the business context, a
-deterministic simulator, and one rule — *only keep changes that measurably
-improve profit* — then let it run. **639 experiments later, it closes the gap
-from 72.5% to 90.7% of the theoretical maximum** (the profit you'd get if you
-could see the future).
+The idea: give an AI agent the business context, a deterministic simulator, and
+one rule — *only keep changes that measurably improve profit* — then let it run.
+**639 experiments later, it closes the gap from 72.5% to 90.7% of the
+theoretical maximum** (the profit you'd get if you could see the future).
 
 ## The setup
 
