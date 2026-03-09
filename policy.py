@@ -34,7 +34,7 @@ def compute_order(day, product, sales_history, order_history):
             n_so = sum(s >= o for s, o in zip(g_s, g_o))
             inf_k = 0.18 if product == 'orchids' else 0.3
             inflate = 1.0 + inf_k * n_so / len(g_s)
-            alpha = 0.3 if product == 'sunflowers' else (0.05 if product == 'orchids' else 0.1)
+            alpha = 0.3 if product == 'sunflowers' else (0.0 if product == 'orchids' else 0.1)
             w = np.exp(alpha * np.arange(len(g_s)))
             est = float(np.average(g_s, weights=w)) * inflate
         else:
