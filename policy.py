@@ -112,7 +112,7 @@ def compute_order(day, product, sales_history, order_history):
         est *= 1.05
     # Lily Christmas Eve spike
     if product == 'lilies' and day == 357:
-        est *= 2.0
+        est *= 2.5
 
     # Summer transition boost for sunflowers (Jun 1-15 only: days 151-165)
     if product == 'sunflowers' and 150 <= day <= 160:
