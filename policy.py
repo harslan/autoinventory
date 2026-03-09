@@ -54,7 +54,7 @@ def compute_order(day, product, sales_history, order_history):
 
     # Orchid risk buffer: never stock out
     if product == 'orchids':
-        est *= 1.1
+        est *= 1.05
 
     # Summer sunflower boost (Jun 1 – Aug 31: days 151–242)
     if product == 'sunflowers' and 151 <= day <= 242:
