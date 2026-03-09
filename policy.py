@@ -60,7 +60,7 @@ def compute_order(day, product, sales_history, order_history):
         elif dt == 1:
             est *= 4.5
         elif dt == 2:
-            est *= 1.2
+            est *= 1.1
         elif dt == -1:
             est *= 3.0
 
