@@ -153,6 +153,26 @@ biases your data, which biases your next order, which causes another stockout.
 The best improvements didn't come from better forecasting — they came from
 understanding how the system's own behavior corrupts its own inputs.
 
+## Try it on your problem
+
+The flower shop is one instance of a general pattern. You can apply it to
+anything with a measurable outcome:
+
+1. **Write the brief** (`agenda.md`) — describe your problem, what you know,
+   what the agent can change, and what metric to optimize. Be specific about
+   domain knowledge. The agent won't discover Valentine's Day, but it will
+   discover that demand spikes 4.4x the day *before*.
+2. **Build the judge** (`prepare.py`) — a deterministic evaluator. Same input,
+   same score, every time. This is what makes the keep/discard loop work.
+   No stochasticity means every $1 difference is real.
+3. **Seed the canvas** (`policy.py`) — a reasonable starting point for the
+   agent to improve. Doesn't need to be good. Needs to run.
+
+The agent handles the rest: hypothesize, edit, evaluate, keep or revert,
+repeat. The pattern works because it turns any optimization problem into a
+tight, automated feedback loop where the cost of being wrong is one second
+of wasted compute.
+
 ## Project structure
 
 ```
