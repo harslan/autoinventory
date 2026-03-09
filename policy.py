@@ -22,7 +22,7 @@ def compute_order(day, product, sales_history, order_history):
     excl = EXCL[product]
 
     # --- Demand estimate: group weekdays/weekends, exclude holiday outliers ---
-    if n >= 10:
+    if n >= 14:
         if is_weekend:
             grp_idx = [i for i in range(n) if i % 7 >= 5 and i not in excl]
         else:
