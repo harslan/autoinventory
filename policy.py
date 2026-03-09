@@ -40,16 +40,9 @@ def compute_order(day, product, sales_history, order_history):
     if product == 'roses':
         dt = VALENTINES - day
         if dt == 0:
-            est = max(est * 4.0, 100)
+            est = max(est * 5.0, 130)
         elif -2 <= dt <= 3:
             est *= 2.0
-
-    if product == 'tulips':
-        dt = VALENTINES - day
-        if dt == 0:
-            est *= 2.0
-        elif -1 <= dt <= 2:
-            est *= 1.5
 
     # Mother's Day: huge for orchids and lilies
     if product in ('orchids', 'lilies'):
