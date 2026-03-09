@@ -33,7 +33,8 @@ def compute_order(day, product, sales_history, order_history):
             g_o = [order_history[i] for i in grp_idx[-10:]]
             n_so = sum(s >= o for s, o in zip(g_s, g_o))
             inflate = 1.0 + 0.3 * n_so / len(g_s)
-            est = float(np.mean(g_s)) * inflate
+            w = np.exp(0.1 * np.arange(len(g_s)))
+            est = float(np.average(g_s, weights=w)) * inflate
         else:
             r_idx = [i for i in range(n) if i not in excl][-14:]
             r_s = [sales_history[i] for i in r_idx]
