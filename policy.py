@@ -76,6 +76,10 @@ def compute_order(day, product, sales_history, order_history):
     if 60 <= day <= 150:
         est *= 1.05
 
+    # Thanksgiving boost
+    if 322 <= day <= 327:
+        est *= 1.1
+
     # Summer transition boost for sunflowers (Jun 1-15 only: days 151-165)
     if product == 'sunflowers' and 151 <= day <= 165:
         est *= 1.7
