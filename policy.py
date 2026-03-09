@@ -11,7 +11,7 @@ EXCL = {
     'tulips': set(range(VALENTINES - 1, VALENTINES + 2)),      # 43-45
     'orchids': set(range(MOTHERS_DAY - 3, MOTHERS_DAY + 4)) | {VALENTINES},  # 130-134 + V-day
     'sunflowers': set(),
-    'lilies': set(range(MOTHERS_DAY - 3, MOTHERS_DAY + 4)) | {VALENTINES},   # 130-134 + V-day
+    'lilies': set(range(MOTHERS_DAY - 2, MOTHERS_DAY + 3)) | {VALENTINES},   # 130-134 + V-day
 }
 
 
