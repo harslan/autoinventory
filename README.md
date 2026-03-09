@@ -185,6 +185,17 @@ autoinventory/
 └── CLAUDE.md       # agent instructions
 ```
 
+---
+
+*The flower shop is a toy problem. The pattern isn't. Every business that
+orders inventory, schedules staff, sets prices, or allocates budget faces the
+same structure: a decision made under uncertainty, a cost for being wrong in
+either direction, and historical data that's biased by your own past decisions.
+The owner who figures out how to write a good brief and build a fair judge will
+have an overnight optimizer for any of these problems. The hard part was never
+the AI. The hard part is knowing your own business well enough to write it
+down.*
+
 ## License
 
 MIT
