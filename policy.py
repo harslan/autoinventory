@@ -68,6 +68,8 @@ def compute_order(day, product, sales_history, order_history):
             est *= 1.2
         elif dt == -1:
             est *= 2.9
+        elif -5 <= dt <= -2:
+            est *= 0.85
 
     if product == 'lilies' and VALENTINES - day == -4:
         est *= 1.5
