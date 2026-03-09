@@ -57,7 +57,7 @@ def compute_order(day, product, sales_history, order_history):
         if dt == 0:
             est = max(est * 8.0, 190)
         elif -2 <= dt <= 3:
-            est *= 2.0
+            est *= 2.3
 
     if product in ('orchids', 'lilies'):
         dm = MOTHERS_DAY - day
