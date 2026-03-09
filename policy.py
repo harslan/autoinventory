@@ -8,7 +8,7 @@ MOTHERS_DAY = 132  # 2nd Sunday in May (May 13)
 # Exclude the full elevated-demand window from each product's history
 EXCL = {
     'roses': set(range(VALENTINES - 3, VALENTINES + 2)),       # 41-45
-    'tulips': set(range(VALENTINES - 3, VALENTINES + 2)),      # 41-45
+    'tulips': set(range(VALENTINES - 1, VALENTINES + 2)),      # 43-45
     'orchids': set(range(MOTHERS_DAY - 3, MOTHERS_DAY + 4)) | {VALENTINES},  # 130-134 + V-day
     'sunflowers': set(),
     'lilies': set(range(MOTHERS_DAY - 3, MOTHERS_DAY + 4)) | {VALENTINES},   # 130-134 + V-day
