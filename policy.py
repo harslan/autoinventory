@@ -154,4 +154,8 @@ def compute_order(day, product, sales_history, order_history):
     elif product == 'sunflowers' and 240 <= day <= 265:
         est *= 0.75
 
+    # Rose Sunday dampener (highest waste DOW)
+    if product == 'roses' and dow == 6:
+        est *= 0.95
+
     return max(0, min(600, int(round(est))))
