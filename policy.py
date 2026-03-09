@@ -48,7 +48,7 @@ def compute_order(day, product, sales_history, order_history):
                 est *= 1.4
     else:
         # Cold-start: use slightly higher defaults to reduce early stockouts
-        cold = {'roses': 26, 'tulips': 22, 'orchids': 9, 'sunflowers': 17, 'lilies': 20}
+        cold = {'roses': 28, 'tulips': 22, 'orchids': 9, 'sunflowers': 17, 'lilies': 20}
         est = float(cold[product])
         if is_weekend:
             est *= 1.6
