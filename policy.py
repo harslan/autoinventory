@@ -51,7 +51,7 @@ def compute_order(day, product, sales_history, order_history):
         cold = {'roses': 26, 'tulips': 24, 'orchids': 9, 'sunflowers': 17, 'lilies': 20}
         est = float(cold[product])
         if is_weekend:
-            est *= 1.5
+            est *= 1.6
 
     # --- Special day boosts ---
     if product == 'roses':
