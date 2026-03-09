@@ -5,13 +5,13 @@ BASE = {'roses': 25, 'tulips': 20, 'orchids': 8, 'sunflowers': 15, 'lilies': 18}
 VALENTINES = 44    # Feb 14
 MOTHERS_DAY = 132  # 2nd Sunday in May (May 13)
 
-# Special-event days to exclude from each product's history (outliers that distort estimates)
+# Exclude the full elevated-demand window from each product's history
 EXCL = {
-    'roses': {VALENTINES},
+    'roses': set(range(VALENTINES - 2, VALENTINES + 3)),       # 42-46
     'tulips': set(),
-    'orchids': {MOTHERS_DAY},
+    'orchids': set(range(MOTHERS_DAY - 2, MOTHERS_DAY + 3)),  # 130-134
     'sunflowers': set(),
-    'lilies': {MOTHERS_DAY},
+    'lilies': set(range(MOTHERS_DAY - 2, MOTHERS_DAY + 3)),   # 130-134
 }
 
 
