@@ -70,7 +70,7 @@ def compute_order(day, product, sales_history, order_history):
         est *= 1.3
 
     if product == 'tulips' and VALENTINES - day == 0:
-        est *= 3.0
+        est *= 3.5
 
     # Spring ramp-up (Apr-May: days 90-129) - all products
     if 60 <= day <= 150:
