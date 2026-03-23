@@ -637,3 +637,11 @@ ce2e379	491031	90.7	discard	sunflower day 150 3.0x days 151-152 2.0x
 f779546	491079	90.7	keep	sunflower day 150 3.0x days 151-152 2.5x
 f188120	491103	90.7	keep	sunflower day 150 3.0->3.5x
 423051e	491082	90.7	discard	sunflower day 150 3.5->4.0x
+f3de105	491101	90.7	discard	rose Sunday dampener 0.93->0.91x
+c0b5136	491031	90.7	discard	rose Sunday dampener 0.93->0.95x
+edccf10	491096	90.7	discard	add rose pre-MD dt=7 1.1x boost
+a7a2d1a	491087	90.7	discard	add rose pre-MD dt=4 1.05x boost
+ecc42b4	491058	90.7	discard	orchid Christmas Eve boost 1.5->1.8x
+482ea80	490998	90.7	discard	add orchid pre-Christmas 1.2x boost days 353-356
+085d043	491022	90.7	discard	add rose Saturday dampener 0.96x
+7d0c091	491034	90.7	discard	add lily Sunday dampener 0.95x
