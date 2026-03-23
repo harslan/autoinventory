@@ -1,5 +1,168 @@
+import numpy as np
+
 BASE = {'roses': 25, 'tulips': 20, 'orchids': 8, 'sunflowers': 15, 'lilies': 18}
+
+VALENTINES = 44    # Feb 14
+MOTHERS_DAY = 132  # 2nd Sunday in May (May 13)
+
+# Exclude the full elevated-demand window from each product's history
+EXCL = {
+    'roses': set(range(VALENTINES - 3, VALENTINES + 6)),       # 41-49
+    'tulips': set(range(VALENTINES - 5, VALENTINES + 6)) | {MOTHERS_DAY, MOTHERS_DAY + 1, MOTHERS_DAY + 2},      # VD+Fri+weekend+6 post + MD period
+    'orchids': set(range(MOTHERS_DAY - 5, MOTHERS_DAY + 6)) | {VALENTINES},  # 130-134 + V-day
+    'sunflowers': {MOTHERS_DAY, MOTHERS_DAY + 1, MOTHERS_DAY + 2, MOTHERS_DAY + 3},
+    'lilies': set(range(MOTHERS_DAY - 2, MOTHERS_DAY + 4)) | {VALENTINES} | set(range(353, 358)),   # 130-135 + V-day + Christmas
+}
 
 
 def compute_order(day, product, sales_history, order_history):
-    return BASE[product]
+    n = len(sales_history)
+    dow = day % 7
+    is_weekend = dow >= 5
+    excl = EXCL[product]
+
+    # --- Demand estimate: group weekdays/weekends, exclude holiday outliers ---
+    if n >= 14:
+        if is_weekend:
+            grp_idx = [i for i in range(n) if i % 7 >= 5 and i not in excl]
+        else:
+            grp_idx = [i for i in range(n) if i % 7 < 5 and i not in excl]
+
+        if len(grp_idx) >= 3:
+            g_s = [sales_history[i] for i in grp_idx[-15:]]
+            g_o = [order_history[i] for i in grp_idx[-15:]]
+            n_so = sum(s >= o for s, o in zip(g_s, g_o))
+            inf_k = 0.18 if product == 'orchids' else (0.35 if product == 'tulips' else 0.3)
+            inflate = 1.0 + inf_k * n_so / len(g_s)
+            alpha = 0.3 if product == 'sunflowers' else (-0.1 if product == 'orchids' else (0.0 if product == 'lilies' else 0.1))
+            w = np.exp(alpha * np.arange(len(g_s)))
+            est = float(np.average(g_s, weights=w)) * inflate
+        else:
+            r_idx = [i for i in range(n) if i not in excl][-10:]
+            r_s = [sales_history[i] for i in r_idx]
+            r_o = [order_history[i] for i in r_idx]
+            n_so = sum(s >= o for s, o in zip(r_s, r_o))
+            inflate = 1.0 + 0.3 * n_so / max(1, len(r_s))
+            est = float(np.mean(r_s)) * inflate if r_s else float(BASE[product])
+            if is_weekend:
+                est *= 1.4
+    else:
+        # Cold-start: use slightly higher defaults to reduce early stockouts
+        cold = {'roses': 28, 'tulips': 22, 'orchids': 9, 'sunflowers': 17, 'lilies': 20}
+        est = float(cold[product])
+        if is_weekend:
+            est *= 1.8 if product == 'roses' else 1.6
+
+    # --- Special day boosts ---
+    if product == 'roses':
+        dt = VALENTINES - day
+        if dt == 0:
+            est = max(est * 7.5, 220)
+        elif dt == 1:
+            est *= 4.4
+        elif dt == 2:
+            est *= 1.05
+        elif dt == 3:
+            est *= 1.05
+        elif dt == 4:
+            est *= 1.2
+        elif dt == -1:
+            est *= 2.9
+        elif -5 <= dt <= -2:
+            est *= 0.85
+
+    if product == 'lilies' and VALENTINES - day == -4:
+        est *= 1.5
+    elif product in ('orchids', 'lilies') and VALENTINES - day == 0:
+        est *= 2.6 if product == 'orchids' else 1.9
+    elif product == 'orchids' and VALENTINES - day == 1:
+        est *= 1.3
+    elif product == 'orchids' and VALENTINES - day == -1:
+        est *= 1.3
+    elif product == 'orchids' and MOTHERS_DAY - day == 2:
+        est *= 1.2
+    elif product == 'orchids' and MOTHERS_DAY - day == -1:
+        est *= 3.4
+    elif product == 'lilies' and MOTHERS_DAY - day == -1:
+        est *= 1.9
+    elif product == 'sunflowers' and MOTHERS_DAY - day == -1:
+        est *= 1.6
+
+    if product == 'tulips' and -5 <= VALENTINES - day <= -2:
+        est *= 0.85
+    elif product == 'tulips' and VALENTINES - day == 0:
+        est *= 3.7
+    elif product == 'tulips' and VALENTINES - day == 4:
+        est *= 1.15
+    elif product == 'tulips' and VALENTINES - day == -1:
+        est *= 1.3
+    elif product == 'tulips' and MOTHERS_DAY - day == -1:
+        est *= 1.3
+    elif product == 'roses' and MOTHERS_DAY - day == 8:
+        est *= 1.2
+    elif product == 'roses' and MOTHERS_DAY - day == 6:
+        est *= 1.7
+    elif product == 'roses' and MOTHERS_DAY - day == 5:
+        est *= 1.1
+    elif product == 'roses' and MOTHERS_DAY - day == 3:
+        est *= 1.05
+    elif product == 'roses' and MOTHERS_DAY - day == 2:
+        est *= 1.1
+    elif product == 'roses' and MOTHERS_DAY - day == 1:
+        est *= 1.2
+    elif product == 'roses' and MOTHERS_DAY - day == -1:
+        est *= 2.6
+
+    # Memorial Day weekend (day 147 = last Mon of May, days 145-146 = Sat/Sun before)
+    if product == 'roses' and day in (145, 146):
+        est *= 1.3
+    elif product == 'tulips' and day in (145, 146):
+        est *= 1.3
+
+    # St. Patrick's Day (day 75 = March 17)
+    elif product == 'roses' and day == 75:
+        est *= 1.5
+    elif product == 'tulips' and day == 76:
+        est *= 1.5
+
+    # Spring ramp-up (Apr-May: days 90-129) - all products
+    if 60 <= day <= 150:
+        est *= 1.05
+
+    # Thanksgiving/fall boost
+    if 315 <= day <= 332:
+        est *= 1.1
+
+    # Winter holiday boost
+    if 340 <= day <= 364:
+        est *= 1.05
+    # Lily Christmas Eve spike
+    if product == 'lilies' and day == 357:
+        est *= 2.5
+    elif product == 'lilies' and 353 <= day <= 356:
+        est *= 1.3
+    # Orchid Christmas Eve boost
+    if product == 'orchids' and day == 357:
+        est *= 1.5
+    # Rose pre-Christmas Saturday
+    if product == 'roses' and day == 341:
+        est *= 1.3
+
+    # Summer transition boost for sunflowers (Jun 1-15 only: days 151-165)
+    if product == 'sunflowers' and day == 150:
+        est *= 3.5
+    elif product == 'sunflowers' and 151 <= day <= 152:
+        est *= 2.5
+    elif product == 'sunflowers' and 153 <= day <= 160:
+        est *= 1.5
+    elif product == 'sunflowers' and 161 <= day <= 167:
+        est *= 1.3
+    # Post-summer dampener for sunflowers (Sep: days 243-260)
+    elif product == 'sunflowers' and 240 <= day <= 265:
+        est *= 0.75
+
+    # Rose Sunday dampener (highest waste DOW)
+    if product == 'roses' and dow == 6:
+        est *= 0.93
+
+    return max(0, min(600, int(round(est))))

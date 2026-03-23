@@ -1,0 +1,647 @@
+commit	profit	pct_oracle	status	description
+04739e6	392449	72.5	baseline	flat BASE ordering policy
+72e55a8	460382	85.1	keep	adaptive same-dow + censoring inflation + holiday boosts
+063d4d0	443275	81.9	discard	higher orchid buffer 1.6, inflate 0.65, wider sunflower
+343b165	460394	85.1	keep	roses V-Day 5x/130, remove tulip V-Day boost
+a2341eb	465614	86.0	keep	orchid buffer 1.3->1.1
+1510918	466364	86.2	keep	orchid buffer 1.1->1.05
+72004a4	466829	86.3	keep	remove orchid buffer entirely
+04aa874	472624	87.3	keep	weekday/weekend grouping instead of same-dow
+2aca11d	473685	87.5	keep	inflate coeff 0.5->0.4
+0b1b61a	474364	87.6	keep	inflate coeff 0.4->0.3
+dccbbcb	471619	87.1	discard	inflate coeff 0.3->0.2 (too low, over-stocking)
+177004c	473159	87.4	discard	history window 10->8
+6f026b8	474049	87.6	discard	orchids Mother's Day 4x (no gain)
+079d971	473311	87.4	discard	sunflower 1.3->1.5
+968c8f6	474416	87.7	keep	sunflower 1.3->1.2
+a7870d7	473981	87.6	discard	sunflower 1.2->1.1
+4e62242	473754	87.5	discard	Christmas rose boost (no demand spike)
+b78d44f	475704	87.9	keep	exclude holiday outliers from history estimation
+7b76318	475787	87.9	keep	exclude full holiday window ±2 days from history
+b786775	474221	87.6	discard	remove sunflower boost (adaptive not enough)
+188831a	476297	88.0	keep	Valentine roses 6x/150
+842edee	476790	88.1	keep	Valentine roses 7x/170
+17a8fad	476933	88.1	keep	Valentine roses 8x/190
+2b11acb	476469	88.0	discard	Valentine roses 10x/220 (over-ordering)
+090e2e1	476933	88.1	discard	Valentine roses min 200 (same as 8x)
+3b742c1	476917	88.1	discard	narrow Valentine window (no improvement)
+3bd9cd2	477048	88.1	keep	higher cold-start defaults for first 7 days
+64de54f	476397	88.0	discard	cold-start v2 too high
+c15de6e	474752	87.7	discard	70th percentile instead of mean (noisy)
+44c6462	477400	88.2	keep	remove Mother's Day window boost
+ae51f5b	477186	88.1	discard	remove Valentine window (hurts -$214)
+035197b	477139	88.1	discard	Valentine pre-only window (worse)
+23d0d43	477114	88.1	discard	EMA alpha=0.2 (too strong)
+eba5c75	477666	88.2	keep	EMA alpha=0.1
+0390cd3	477304	88.1	discard	EMA alpha=0.15
+8feaf93	477355	88.1	discard	EMA alpha=0.05
+9390ab9	477623	88.2	discard	Mother's Day window 1.3x (marginal regression)
+c356cb8	477556	88.2	discard	tulip Valentine exclusion (no gain)
+0862507	477162	88.1	discard	EMA window 10->14
+bb2a076	477483	88.2	discard	EMA window 10->12
+ed18c46	477666	88.2	discard	EMA fallback path (same profit, no gain)
+2a7c961	477306	88.1	discard	1.05x global safety stock (over-ordering)
+50010f8	477203	88.1	discard	threshold n>=5 (worse)
+543fb33	477478	88.2	discard	linear trend extrapolation (noisy)
+3625277	475402	87.8	discard	direct censoring imputation 1.2x (worse)
+2a4d323	476772	88.1	discard	newsvendor EMA+0.5sigma (over-orders)
+27b5f3a	476887	88.1	discard	max(EMA, median) worse
+2a32385	477358	88.1	discard	Easter boost Apr 20 (not in data)
+e9b87ba	477385	88.1	discard	wider Valentine window +4 days before
+671fc74	477486	88.2	discard	orchid inflate 0.2 (no gain)
+464c38b	477094	88.1	discard	stockout streak 1.15x (over-orders)
+afb45e8	478446	88.4	keep	sunflower transition boost 151-178 at 1.4x
+274d371	478448	88.4	keep	sunflower transition 1.6x
+bf9eb5a	478262	88.4	discard	window 185 (too wide)
+c37998d	478590	88.4	keep	sunflower transition window 165
+14bde8f	477887	88.3	discard	window 157 too narrow
+a5f6cb8	478768	88.5	keep	post-summer sunflower dampener 0.85x days 243-260
+28a3b9b	478778	88.5	keep	dampener 0.85->0.8
+7cfb58c	478834	88.5	keep	dampener 0.8->0.75
+d822c90	478817	88.5	discard	dampener 0.7 (slight regression)
+86dc777	478667	88.4	discard	dampener window 270 (wider)
+4c7f141	478827	88.5	discard	dampener window 250 (negligible)
+2e7284c	478945	88.5	keep	Mother's Day EXCL ±2->±3 days
+f54439a	478819	88.5	discard	EXCL ±4 (over-excludes)
+3019e42	478885	88.5	discard	Valentine EXCL ±3 (slight regression)
+420f293	478940	88.5	discard	spring lily boost 1.1x (neutral)
+ed2975a	478672	88.4	discard	fall sunflower dampener Oct (over-dampens)
+add8331	478991	88.5	keep	spring ramp-up 1.05x days 90-129
+16a1e75	478962	88.5	discard	spring 1.08 (slightly worse)
+104a377	479179	88.5	keep	spring 60-129 (include March)
+8977d05	478716	88.5	discard	spring start Feb (Feb demand not elevated)
+14f11da	479360	88.6	keep	spring 60-150 (through late May)
+6ea5977	479299	88.5	discard	spring 60-165 too wide
+657602c	479125	88.5	discard	spring 1.07 (slightly worse)
+f94eb47	479301	88.5	discard	exclude sunflowers from spring 1.05x (hurts)
+c221d84	478645	88.4	discard	linear growth trend 100ver year (over-orders)
+acdb5c0	479294	88.5	discard	Valentine window 2.0->1.7x (slight regression)
+e95b882	479294	88.5	discard	summer 1.03x non-sunflowers 151-200 (hurts)
+a8209a4	479176	88.5	discard	Mother's Day 3x->3.5x (over-orders)
+48d7037	479120	88.5	discard	orchid Mother's Day 4x lily 3x (over-orders)
+42e4af9	478826	88.5	discard	fall dampener 0.97x non-sunflowers 243-300 (hurts)
+3034bd5	479290	88.5	discard	spring 1.05->1.06x (worse)
+27696a9	479390	88.6	keep	sunflower transition 1.6->1.7x
+861b37e	479392	88.6	keep	sunflower transition 1.7->1.8x
+f0dd616	479434	88.6	keep	sunflower transition 1.8->1.9x
+60a7146	479405	88.6	discard	sunflower transition 2.0x (slight regression)
+c2ecb4c	479422	88.6	discard	sunflower window 148-165 (slight regression)
+0294575	479433	88.6	discard	sunflower dampener 0.70 (neutral)
+cadc674	479451	88.6	keep	sunflower dampener window 240-265
+3412e29	479167	88.5	discard	sunflower dampener window 237-270 (too wide)
+cdbf6b0	479517	88.6	keep	Valentine window 2.0->2.3x
+1cfa008	479569	88.6	keep	Valentine window 2.3->2.5x
+425af15	479595	88.6	keep	Valentine window 2.5->2.7x
+212a441	479461	88.6	discard	Valentine window 3.0x (over-orders)
+339a33d	479567	88.6	discard	Valentine window 2.8x (slightly worse than 2.7x)
+3613977	479075	88.5	discard	extend Valentine window -3 (over-orders)
+9b00413	479987	88.7	keep	narrow Valentine post-window to -1 (just 1 day after)
+2ffca67	479154	88.5	discard	Valentine pre-only window (hurts, need 1 day after)
+6812e59	479409	88.6	discard	Valentine 2.7x pre + 1.5x after (worse)
+207a2c4	479747	88.6	discard	Valentine 9x/210 (over-orders main day)
+0e339fb	479868	88.7	discard	spring start 55 (slightly worse)
+7de4b87	479932	88.7	discard	spring 60-155 (slightly worse)
+48291df	480068	88.7	keep	align roses EXCL with boost window (41-45)
+b1e0339	480035	88.7	discard	Valentine window 2.9x (slightly worse)
+ace6859	479364	88.5	discard	inflate 0.25 (worse)
+9590c79	479871	88.7	discard	EMA 0.12 (worse)
+1a4f717	480076	88.7	keep	history window 10->11
+574f6a1	480096	88.7	keep	history window 11->13
+e16e463	480160	88.7	keep	history window 13->15
+43270f2	479647	88.6	discard	history window 18 (too many stale obs)
+4efad79	479866	88.7	discard	history window 16 (worse than 15)
+5c0f63a	479815	88.7	discard	winter orchid boost (hurts)
+aa3af0c	479952	88.7	discard	roses Mother's Day 1.5x (no gain)
+eb92d82	480000	88.7	discard	skip spring boost orchids/lilies post-Mother's Day (worse)
+a4e6e8e	480160	88.7	discard	EMA fallback path (same profit)
+c874f81	480216	88.7	keep	sunflowers EMA alpha 0.15 (higher recency for seasonal product)
+1b8bb8b	480053	88.7	discard	roses EMA 0.15 (hurts)
+8abd63d	480442	88.8	keep	sunflowers EMA alpha 0.2
+205ef54	480443	88.8	keep	sunflowers EMA alpha 0.25 (marginal)
+a541b34	480501	88.8	keep	sunflowers EMA alpha 0.3
+32ed0fb	480177	88.7	discard	sunflowers EMA 0.4 (too high)
+efd5340	480145	88.8	discard	lilies EMA 0.3 (hurts)
+f92fec7	477710	88.3	discard	sunflowers EXCL 151-165 (removes too much history)
+72caf27	480189	88.7	discard	sunflowers inflate 0.2 (worse with EMA 0.3)
+2e8f054	480307	88.8	discard	sunflowers window 10 (worse)
+02ef1ad	479671	88.6	discard	sunflower dampener window 265->285 (extend October)
+a9b8b2b	480147	88.7	discard	orchid/lily pre-Mother's Day build-up 1.5x (days 129-131)
+15fcfb6	480875	88.8	keep	graduated Valentine: dt=1 gets 3.5x vs 2.7x for other pre-days
+736d727	481096	88.9	keep	Valentine dt=1 boost 3.5->4.0x
+1189fc6	481259	88.9	keep	Valentine dt=1 boost 4.0->4.5x
+0875121	481155	88.9	discard	Valentine dt=1 boost 4.5->5.0x (over-orders)
+b9e0c5d	481195	88.9	discard	graduated Valentine dt=2 gets 3.0x (slight regression)
+cbb9584	481034	88.9	discard	orchid Mother's Day 3x->4x (over-orders)
+05ef526	481169	88.9	discard	orchid EMA alpha 0.1->0.15 (slight regression)
+76c634a	479527	88.6	discard	sunflower winter dampener 0.8x days 300-364 (EMA already handles)
+690227e	480704	88.8	discard	orchid inflate coeff 0.4 (over-orders)
+f870491	480715	88.8	discard	Valentine post-day 2.7->1.5x (hurts, post demand also elevated)
+048c899	481139	88.9	discard	orchid Mother's Day 3.0->3.5x (slight regression)
+4c2ff96	480944	88.9	discard	spring start 60->65 (worse)
+f961480	481223	88.9	discard	roses spring 1.05->1.08x (marginal regression)
+7c71df7	481347	88.9	keep	tulip EXCL for Valentine window (substitution effect bias)
+713fd67	480948	88.9	discard	Valentine window extend dt=4 (day 40 not elevated)
+da07b61	462022	85.4	discard	Friday as weekend (dow>=4) — massive regression
+e13ecde	481195	88.9	discard	sunflower EMA alpha 0.3->0.35 (worse)
+a200c26	481344	88.9	discard	lily Valentine EXCL (no gain)
+93e1104	481242	88.9	discard	orchid Valentine EXCL (slight regression)
+05c3652	481482	88.9	keep	orchid Valentine's Day boost 1.5x
+20e4287	481557	88.9	keep	orchid Valentine boost 1.5->2.0x
+f3d5789	481647	88.9	keep	orchid Valentine boost 2.0->2.5x
+abdee1d	481572	88.9	discard	orchid Valentine boost 2.5->3.0x (slight regression)
+9cd7eae	481719	89.0	keep	lily Valentine's Day boost 1.5x
+fed94ec	481771	89.0	keep	lily Valentine boost 1.5->2.0x
+df24048	481735	89.0	discard	lily Valentine boost 2.0->2.5x (slight regression)
+5658c89	481711	89.0	discard	tulip Mother's Day boost 1.3x (slight regression)
+3e63fc2	481831	89.0	keep	orchid pre-Valentine boost 1.3x (day before)
+920860e	481726	89.0	discard	orchid pre-Valentine dt=1-3 (over-orders dt=2/3)
+4004ecf	481801	89.0	discard	orchid pre-Valentine 1.3->1.5x (slight regression)
+429aef2	481807	89.0	discard	lily pre-Valentine 1.3x (slight regression)
+501754d	481786	89.0	discard	orchid Valentine 2.5->2.3x (slight regression)
+426d36e	481861	89.0	keep	orchid EXCL also excludes Valentine's Day
+4b1fa06	481911	89.0	keep	lily EXCL also excludes Valentine's Day
+41893fa	481819	89.0	discard	orchid/lily Valentine EXCL full window (just day is better)
+e20e68b	481825	89.0	discard	tulip EXCL narrow to day-only (full window is better)
+73487a2	481908	89.0	discard	orchid/lily EXCL extend to day 43 (no gain)
+776d1b6	481847	89.0	discard	rose Valentine post+2 day 1.3x (no gain)
+c606aaa	481901	89.0	discard	lily Valentine 2.0->1.8x (slight regression)
+ec11923	481879	89.0	discard	orchid/lily Mother's Day EXCL ±3->±2 (worse)
+eb45071	481937	89.0	keep	roses Valentine minimum 190->220
+d598baf	481697	89.0	discard	roses Valentine minimum 220->250 (over-orders)
+a0cf60d	481873	89.0	discard	lily Mother's Day 3.0->3.5x (over-orders)
+28b6238	481907	89.0	discard	orchid Valentine 2.5->2.7x (slight regression)
+565acb8	482153	89.1	keep	graduated Valentine: dt=3 at 2.0x vs 2.7x for dt=1,2,-1
+393355d	482313	89.1	keep	Valentine dt=3 boost 2.0->1.5x
+cb09772	482401	89.1	keep	Valentine dt=3 boost 1.5->1.2x
+796fde2	482440	89.1	keep	Valentine dt=3 boost 1.2->1.0x (no boost 3 days out)
+7df01f7	482440	89.1	keep	remove dt=3 clause (simpler, same profit)
+b432bfd	482592	89.2	keep	Valentine dt=2 lowered to 2.0x
+bee3866	482696	89.2	keep	Valentine dt=2 lowered to 1.5x
+610d684	482768	89.2	keep	Valentine dt=2 lowered to 1.2x
+d051d4f	482758	89.2	discard	Valentine dt=2 at 1.0x (marginal worse than 1.2x)
+1aa29af	482658	89.2	discard	rose EXCL narrow 41-45->42-45 (day 41 still elevated)
+38da86a	482768	89.2	discard	orchid pre-Valentine 1.3->1.2x (same profit)
+91df616	482854	89.2	keep	Valentine post-day (dt=-1) boost 2.7->3.0x
+bd4eaaa	482742	89.2	discard	Valentine dt=-1 boost 3.0->3.5x (over-orders)
+0e7f2b3	482834	89.2	discard	rose inflate coeff 0.3->0.35 (slight regression)
+2956bda	482839	89.2	discard	remove orchid pre-Valentine boost (tiny regression)
+0024ab6	482799	89.2	discard	lily Easter boost 1.3x day 93-97 (no spike in data)
+202b1ab	482870	89.2	keep	Valentine dt=2 boost 1.2->1.1x
+d5895ff	482844	89.2	discard	remove Valentine dt=2 (1.0x slightly worse than 1.1x)
+d3d46fa	482806	89.2	discard	Valentine dt=1 boost 4.5->4.8x (regression)
+46ea715	482371	89.1	discard	history window 15->14 (worse than 15)
+1d26d98	482690	89.2	discard	orchid cold-start 10->12 (over-orders)
+c1fd39f	482858	89.2	discard	lily Valentine 2.0->2.2x (slight regression)
+3f17a8c	482874	89.2	keep	tulip EXCL narrow 41-45 to 43-45 (marginal +)
+613b9c6	482824	89.2	discard	tulip EXCL 44-45 (worse than 43-45)
+0d9c47a	482693	89.2	discard	remove sunflower dampener (EMA not fast enough)
+7e663ff	482773	89.2	discard	rose EXCL extend to day 40 (removes valid data)
+c281234	482889	89.2	keep	orchid Valentine boost 2.5->2.4x
+6e3695d	482889	89.2	discard	orchid Valentine 2.4->2.3x (same profit, keep 2.4)
+8d60249	482597	89.2	discard	1/(1-0.3*so_rate) inflate formula (worse)
+6c98944	482877	89.2	discard	fallback inflate 0.3->0.4 (slight regression)
+a739b64	482706	89.2	discard	spring boost 1.05->1.06x (still regresses)
+3c1c981	483009	89.2	keep	orchid Mother's Day 3.0->2.5x (lily stays 3.0x)
+d96e9e4	483129	89.3	keep	orchid Mother's Day 2.5->2.0x
+87f0be6	483249	89.3	keep	orchid Mother's Day 2.0->1.5x
+b0bba00	483309	89.3	keep	orchid Mother's Day 1.5->1.2x
+8ef9269	483354	89.3	keep	orchid Mother's Day 1.2->1.0x (no boost for orchids)
+35a8e5b	483354	89.3	keep	simplify Mother's Day to lily only 3x (same profit)
+c65bdec	483422	89.3	keep	lily Mother's Day 3.0->2.5x
+92eb9a4	483486	89.3	keep	lily Mother's Day 2.5->2.0x
+996722b	483550	89.3	keep	lily Mother's Day 2.0->1.5x
+e75f45d	483614	89.3	keep	lily Mother's Day 1.5->1.0x (no boost)
+9e91973	483614	89.3	keep	remove lily Mother's Day no-op boost line (same profit)
+b1aa59f	483563	89.3	discard	narrow orchid/lily EXCL MD -3+3->-1+1
+b1aa59f	483563	89.3	discard	narrow orchid/lily EXCL MD -3+3->-1+1
+0d7bc1d	483604	89.3	discard	lily Valentine 2.0->1.8x
+a8f0116	483584	89.3	discard	orchid pre-Valentine dt=1 1.3->1.5x
+6698ab0	483574	89.3	discard	roses Valentine dt=2 1.1->1.3x
+21f0922	483724	89.4	keep	tulip Valentine Day 1.5x boost
+6afee1d	483834	89.4	keep	tulip Valentine 1.5->2.0x
+904d3f3	483944	89.4	keep	tulip Valentine 2.0->2.5x
+8a093bb	484064	89.4	keep	tulip Valentine 2.5->3.0x
+d862a50	484174	89.5	keep	tulip Valentine 3.0->3.5x
+3b5cd68	484214	89.5	keep	tulip Valentine 3.5->4.0x
+495227f	484170	89.5	discard	tulip Valentine 4.0->4.5x
+19c02bf	484170	89.5	discard	tulip pre-Valentine dt=1 1.5x
+1d2e620	484188	89.5	discard	remove rose Valentine dt=2 boost (was 1.1x)
+895ca10	484190	89.5	discard	lily pre-Valentine dt=1 1.3x
+9d7f33c	483644	89.4	discard	orchid inflate coeff 0.3->0.4
+17b4bdd	484006	89.4	discard	sunflower summer boost 1.9->2.1x
+297b148	484283	89.5	keep	sunflower summer boost 1.9->1.7x
+c8f5be9	484149	89.5	discard	sunflower summer boost 1.7->1.5x
+27733d4	484248	89.5	discard	sunflower summer boost 1.7->1.8x
+2deb2c4	483710	89.4	discard	sunflower summer boost window 151-165->145-175
+f5c1594	484171	89.5	discard	roses Valentine dt=-1 3.0->3.5x
+1787bb4	484112	89.5	discard	roses Valentine dt=-1 3.0->2.5x
+a44d78c	484103	89.5	discard	orchid cold-start 10->12
+b65b6a3	483861	89.4	discard	EMA alpha 0.1->0.15 for non-sunflower
+cc09baf	483410	89.4	discard	remove spring boost
+1c1040d	484263	89.5	discard	Christmas holiday boost 1.1x days 350-364
+e78cb04	483933	89.4	discard	history window 15->12
+304deb2	483737	89.4	discard	history window 15->20
+300c977	484055	89.5	discard	spring boost 1.05->1.07x
+348ba71	484065	89.5	discard	remove orchid/lily MD EXCL
+f563ee2	484483	89.5	keep	Thanksgiving boost 1.1x days 322-327
+7f6e92b	484400	89.5	discard	Thanksgiving boost 1.1->1.2x
+3ddecd8	484432	89.5	discard	Christmas boost 1.1x days 350-364
+e0054a0	484561	89.5	keep	widen Thanksgiving boost 322-327->318-330
+09a5f29	484232	89.5	discard	widen Thanksgiving boost 318-330->312-336
+d31e708	484648	89.5	keep	Thanksgiving window 318-330->315-332
+3e8b279	484168	89.5	discard	Thanksgiving window 315-332->310-335
+78418b6	484403	89.5	discard	Thanksgiving boost 1.1->1.15x
+1036c6c	484651	89.5	keep	winter holiday boost 1.05x days 348-364
+2f1fb4b	484599	89.5	discard	winter holiday boost 1.05->1.08x
+012599e	484665	89.5	keep	winter holiday window 348-364->340-364
+9b53bb1	484639	89.5	discard	winter holiday window 340-364->335-364
+6f9098c	484649	89.5	discard	fall boost 1.05x days 268-314
+9ce2c80	484636	89.5	discard	sunflower dampener 0.75->0.8x
+8fc943d	484492	89.5	discard	sunflower dampener 0.75->0.7x
+95067f6	484650	89.5	discard	orchid Valentine 2.4->2.5x retest
+63a30a1	484584	89.5	discard	weekend multiplier 1.5->1.6x
+b4380d8	484605	89.5	discard	tulip Mother's Day 1.3x
+be81712	484629	89.5	discard	roses spring boost 1.05->1.08x specific
+b4ed791	484392	89.5	discard	cold-start threshold n>=7->n>=5
+75ec47a	484054	89.4	discard	inflate coeff 0.3->0.35
+e68cae3	483711	89.4	discard	inflate coeff 0.3->0.25
+4bd656b	484616	89.5	discard	weekday group min 3->2
+171c014	484654	89.5	discard	weekday group min 3->4
+be7d729	484559	89.5	discard	Thanksgiving roses/orchids 1.15x
+3782af0	484530	89.5	discard	orchid Thanksgiving 1.2x others 1.1x
+98e32e4	484020	89.4	discard	spring ramp linear 1.0->1.1
+98f09f5	484663	89.5	discard	October boost 1.05x days 273-314
+dee7cc6	484424	89.5	discard	spring boost extend 150->180 days
+5935d68	484011	89.4	discard	spring boost narrow 60-150->70-130
+ee3538d	484474	89.5	discard	summer boost 1.03x days 185-240
+fd49bcd	484625	89.5	discard	lily pre-Mother's Day dt=1 1.3x
+edb3562	484505	89.5	discard	rose Valentine minimum 220->240
+a71ebfb	484639	89.5	discard	rose Valentine minimum 220->200
+e6ed0d7	484665	89.5	keep	orchid MD 1.05x same profit (simplicity)
+cca63fb	484661	89.5	discard	lily Valentine 2.0->2.1x
+ef886fb	484625	89.5	discard	rose Valentine dt=1 4.5->4.7x
+d3495d4	484638	89.5	discard	rose Valentine dt=1 4.5->4.3x
+99528a0	484665	89.5	discard	fallback window 14->16 (same profit)
+297bf72	482892	89.2	discard	linear YoY growth factor
+fc65e19	484772	89.6	keep	sunflower summer window 151-165->151-162
+6d75c8d	484441	89.5	discard	sunflower summer window 151-162->153-162
+ac3a83b	484913	89.6	keep	sunflower summer window 151-162->151-160
+d45890d	483944	89.4	discard	sunflower summer window 151-160->151-158
+05321b2	484999	89.6	keep	sunflower summer window 151-160->150-160
+50bbe7d	484952	89.6	discard	sunflower summer window 150-160->148-160
+c16a1ac	485006	89.6	keep	sunflower summer boost 1.7->1.75x
+4ebbcff	485035	89.6	keep	sunflower summer boost 1.75->1.8x
+74e8d94	485074	89.6	keep	sunflower summer boost 1.8->1.9x
+24b5bfc	485001	89.6	discard	sunflower summer boost 1.9->2.0x
+7bec054	485094	89.6	keep	tulip Valentine 4.0->3.8x
+6d18c79	485054	89.6	discard	tulip Valentine 3.8->3.6x
+05212cf	485086	89.6	discard	tulip Valentine 3.8->3.9x
+0cf98e4	484756	89.5	discard	spring boost extend start 60->50
+24c5242	485069	89.6	discard	sunflower dampener window 240-265->242-262
+5f5e978	485070	89.6	discard	summer boost 1.03x 166-212 non-sunflowers
+26361a3	484534	89.5	discard	sunflower dampener 240-265->232-260
+0ec7d3e	484722	89.5	discard	sunflower dampener 240-265->238-272
+335ead2	485074	89.6	discard	sunflower secondary boost 1.2x days 161-190
+20354f5	484990	89.6	discard	Thanksgiving boost 1.1->1.12x
+efc7b5c	485039	89.6	discard	Thanksgiving window 315-332->315-333
+04d5190	485077	89.6	discard	remove winter holiday boost (saves )
+66934b9	484989	89.6	discard	winter holiday boost 1.05->1.06x
+c175b75	485079	89.6	discard	add pre-Valentine to orchid EXCL
+020364a	484980	89.5	discard	general Valentine pre-period 1.1x dt=2,3
+d6fa913	485116	89.6	keep	rose cold-start 30->28
+21bb11e	485134	89.6	keep	rose cold-start 28->26
+7ea4b77	484974	89.5	discard	rose cold-start 26->24
+0fa81e5	485122	89.6	discard	tulip cold-start 24->22
+92863fc	485028	89.6	discard	lily cold-start 22->20
+752cce6	485114	89.6	discard	sunflower cold-start 18->16
+8b28856	485209	89.6	keep	orchid post-Valentine dt=-1 1.2x boost
+44ef2fb	485194	89.6	discard	orchid post-Valentine dt=-1 1.2->1.3x
+65a31e2	485194	89.6	discard	orchid Valentine 2.4->2.5x
+6f0a7cc	485209	89.6	discard	orchid Valentine 2.4->2.3x (no change)
+7249ada	485109	89.6	discard	tulip Mother's Day 1.5x boost
+544f43f	485104	89.6	discard	orchid Mother's Day 1.5x boost
+db608ea	485105	89.6	discard	rose post-Valentine dt=-1 3.0->3.5x
+257762e	485071	89.6	discard	rose post-Valentine dt=-1 3.0->2.5x
+66d233d	485097	89.6	discard	rose pre-Valentine dt=1 4.5->5.0x
+5874021	485096	89.6	discard	rose pre-Valentine dt=1 4.5->4.0x
+d8a761a	484744	89.6	discard	orchid inflate 0.3->0.35
+a14c33a	485034	89.6	discard	rose alpha 0.1->0.15
+9fdb8a7	485137	89.6	discard	rose EXCL widen 41-45->40-46
+61c8211	485105	89.6	discard	Thanksgiving boost 1.1->1.12
+1a9e73d	485059	89.6	discard	Thanksgiving boost 1.1->1.08
+22bb500	485125	89.6	discard	rose winter boost 1.05->1.08
+014cf62	484537	89.5	discard	history window 15->20
+37f8c62	484127	89.5	discard	history window 15->10
+1ee9f1a	484986	89.6	discard	spring boost end 150->130
+838aeda	484997	89.6	discard	spring boost 1.05->1.07
+f5448f8	485209	89.6	discard	orchid min order floor=5 (no change)
+f266ccc	485169	89.6	discard	tulip Valentine 3.8->3.6x
+5f348fe	485189	89.6	discard	tulip Valentine 3.8->4.0x retry
+5c12a71	485164	89.6	discard	orchid pre-MD dt=1 1.2x boost
+844e644	485064	89.6	discard	sunflower alpha 0.3->0.2
+73c413d	484780	89.6	discard	sunflower alpha 0.3->0.4
+926b31a	484619	89.5	discard	rose Christmas/NYE boost days 357-364 1.3x
+288b80e	484557	89.5	discard	sunflower post-summer dampener extend 265->280
+bd53edd	485045	89.6	discard	sunflower post-summer dampener 0.75->0.7
+3cbaa2a	485184	89.6	discard	sunflower post-summer dampener 0.75->0.8
+a6fd485	485149	89.6	discard	orchid pre-Valentine dt=1 1.3->1.1x
+8f0e22f	485193	89.6	discard	lily post-Valentine dt=-1 1.2x boost
+60e8e7f	485179	89.6	discard	orchid post-Valentine dt=-1 1.2->1.1x
+447bb92	483076	89.3	discard	add safety stock +0.5*std(history)
+0617dcd	484852	89.6	discard	rose Friday boost 1.1x
+2c379e7	485167	89.6	discard	extend cold-start period 7->14 days
+af1162d	485048	89.6	discard	cold-start period 7->5
+7a64e03	485192	89.6	discard	grp_idx threshold 3->2
+76e6d08	485095	89.6	discard	sunflower dampener narrow 240-265->245-260
+df898bb	484966	89.6	discard	rose history window 15->10 product-specific
+d867981	485127	89.6	discard	tulip EXCL widen to include dt=2 days 42-45
+ae349cb	484310	89.5	discard	inflate factor 0.3->0.25
+740ba2d	484533	89.5	discard	inflate factor 0.3->0.35
+c4a764c	485189	89.6	discard	fallback inflate 0.3->0.4
+dd77fa8	485201	89.6	discard	fallback inflate 0.3->0.35
+515cd3e	485124	89.6	discard	sunflower summer window start 150->148
+9ec91d7	485023	89.6	discard	sunflower summer window end 160->162
+144d916	484735	89.6	discard	differentiated spring boost March 1.03 April-May 1.07
+2c1c380	484899	89.6	discard	general summer boost 1.03x days 152-240
+6dbe19e	485105	89.6	discard	rose post-Valentine dt=-2 1.5x boost
+5a29d36	484977	89.6	discard	rose Valentine floor 220->250
+462dc0f	485209	89.6	discard	rose Valentine floor 220->200 (no change)
+8586753	484993	89.6	discard	rose Valentine multiplier 8.0->9.0
+8c256f7	485217	89.6	keep	rose Valentine multiplier 8.0->7.5
+0aba895	485217	89.6	discard	rose Valentine multiplier 7.5->7.0 (no change)
+dfd8eea	484760	89.6	discard	mid-winter dampener 0.95x days 2-40
+2b46eba	484380	89.5	discard	add intra-year growth trend 0-5%
+70bf4fd	485157	89.6	discard	extra sunflower Thanksgiving boost 1.1x
+626d82d	485099	89.6	discard	rose EXCL narrow 41-45->42-45
+5bcd4b0	485172	89.6	discard	orchid EXCL add V-1 day 43
+f7386dc	485202	89.6	discard	orchid EXCL add V+1 day 45
+4a04f84	484930	89.6	discard	spring boost start 60->50
+0aad2b6	484671	89.6	discard	spring boost start 60->70
+90da837	485037	89.6	discard	orchid cold-start 10->12
+60f0aac	485112	89.6	discard	orchid cold-start 10->8
+bd518f7	485187	89.6	discard	orchid pre-Valentine dt=1 1.3->1.5x
+534e166	485223	89.6	keep	fallback weekend multiplier 1.5->1.4
+dfe2592	485163	89.6	discard	fallback weekend multiplier 1.4->1.3
+c553f55	484810	89.6	discard	cold-start weekend multiplier 1.5->1.4
+acb9561	485162	89.6	discard	cold-start weekend multiplier 1.5->1.6
+d1c0f5b	485159	89.6	discard	lily cold-start 22->24
+aad0488	485179	89.6	discard	tulip pre-Valentine dt=1 1.5x boost
+d019f45	485086	89.6	discard	pre-spring 1.02x days 46-59
+821cd32	485214	89.6	discard	remove rose pre-Valentine dt=2 1.1x boost
+f7b0529	485231	89.6	keep	rose pre-Valentine dt=2 1.1->1.05
+e996822	485214	89.6	discard	remove rose pre-Valentine dt=2 boost
+a4a95ec	485216	89.6	discard	orchid post-Valentine dt=-2 1.1x boost
+51ebc78	485227	89.6	discard	lily Valentine 2.0->2.1x
+cdbdd64	485239	89.6	keep	lily Valentine 2.0->1.9x
+7148988	485221	89.6	discard	lily Valentine 1.9->1.8x
+a3b683c	485134	89.6	discard	winter boost 1.05->1.06
+b7ab08c	485231	89.6	discard	winter boost 1.05->1.04
+0fa93c2	485231	89.6	discard	lily pre-Valentine dt=1 1.1x boost (no change)
+60a4cee	485134	89.6	discard	sunflower summer start 150->151
+dad1c7b	485168	89.6	discard	sunflower October boost 1.1x days 273-305
+2319a83	485177	89.6	discard	spring boost exempt sunflowers
+cd5e13b	485028	89.6	discard	rose post-summer dampener 0.95x days 200-250
+308a705	485190	89.6	discard	sunflower cold-start 18->20
+17f162e	485175	89.6	discard	tulip cold-start 24->26
+f0d4603	485224	89.6	discard	orchid pre-Valentine dt=2 1.05x
+4f113a6	485239	89.6	discard	fallback window 14->21 (no change)
+564a10b	485229	89.6	discard	fallback window 14->10
+e90c6ca	485033	89.6	discard	orchid/lily EXCL narrow to just MD+V-day
+fe94e71	485192	89.6	discard	extra rose Thanksgiving boost 1.05x
+d2bcf5a	484826	89.6	discard	spring boost 1.05->1.03
+60a86a8	484954	89.6	discard	orchid Christmas boost 1.2x days 354-364
+296f9e5	485061	89.6	discard	Easter lily boost 1.3x days 95-105
+cd8071e	485175	89.6	discard	lily Mother's Day 1.5x boost
+4329dd7	485211	89.6	discard	lily Mother's Day 1.2x boost
+4329dd7	485211	89.6	discard	lily Mother's Day 1.2x boost
+7cbee27	485195	89.6	discard	tulip pre-Valentine dt=1 1.5x boost
+b20b461	485209	89.6	discard	orchid EXCL add V-day adjacent (43,45)
+9a74842	485299	89.7	keep	orchid post-Mother's Day dt=-1 1.2x boost
+cbcd194	485329	89.7	keep	orchid post-MD boost 1.2->1.3x
+cac8ad4	485359	89.7	keep	orchid post-MD boost 1.3->1.4x
+8af8c8b	485389	89.7	keep	orchid post-MD boost 1.4->1.5x
+51e21cd	485419	89.7	keep	orchid post-MD boost 1.5->1.6x
+0a3c709	485449	89.7	keep	orchid post-MD boost 1.6->1.7x
+ca957a0	485479	89.7	keep	orchid post-MD boost 1.7->1.8x
+d004baa	485509	89.7	keep	orchid post-MD boost 1.8->1.9x
+6ea456a	485539	89.7	keep	orchid post-MD boost 1.9->2.0x
+c7cdbf1	485689	89.7	keep	orchid post-MD boost 2.0->2.5x
+157d3fd	485839	89.7	keep	orchid post-MD boost 2.5->3.0x
+2e88023	485869	89.7	keep	orchid post-MD boost 3.0->3.5x
+e0ba601	485794	89.7	discard	orchid post-MD boost 3.5->4.0x
+5284043	486032	89.8	keep	lily post-MD boost 2.0x
+1a90b23	485948	89.8	discard	lily post-MD boost 2.0->3.0x
+05fa2ee	485992	89.8	discard	lily post-MD boost 2.0->2.5x
+822b021	485863	89.8	discard	orchid+lily pre-MD day boost 1.5x
+99556c4	485927	89.8	discard	orchid Mother's Day 1.5x boost
+dd6ce87	485963	89.8	discard	orchid+lily post-MD dt=-2 1.3x boost
+28826c1	485957	89.8	discard	orchid post-MD 3.5->4.0x (w/ lily 2.0x)
+ee2bb2f	486022	89.8	discard	lily post-MD 2.0->1.8x
+ce0d5d5	486016	89.8	discard	lily post-MD 2.0->2.2x
+caac483	486002	89.8	discard	orchid post-MD 3.5->3.7x
+df14e82	485912	89.8	discard	exclude orchids from spring boost
+25e23c9	485957	89.8	discard	orchid post-MD dt=-2 1.5x boost
+e0b0721	485987	89.8	discard	orchid pre-MD dt=3 (Thursday) 1.3x boost
+fdbb784	485968	89.8	discard	rose post-Valentine dt=-2 1.3x boost
+ce8eafc	485627	89.8	discard	orchid extra Thanksgiving boost 1.2x
+9f5bdd2	485852	89.8	discard	orchid cold-start 10->12
+4d7ce21	485552	89.8	discard	orchid-specific inflate 0.3->0.35
+04a8be2	486092	89.8	keep	orchid-specific inflate 0.3->0.25
+2083de5	486182	89.8	keep	orchid inflate 0.25->0.2
+3364def	486107	89.8	discard	orchid inflate 0.2->0.15
+63d5b3a	486302	89.8	keep	orchid inflate 0.2->0.18
+57e4cb3	486302	89.8	discard	orchid inflate 0.18->0.16 (same)
+9fe48b8	485882	89.8	discard	orchid inflate 0.18->0.14
+93965d2	486167	89.8	discard	orchid inflate 0.18->0.17
+c8a80c6	486146	89.8	discard	lily inflate 0.3->0.25
+165b999	486234	89.8	discard	lily inflate 0.3->0.35
+b5048d9	486176	89.8	discard	rose inflate 0.3->0.35
+e5694f8	486117	89.8	discard	rose inflate 0.3->0.25
+9b9893e	486302	89.8	discard	orchid fallback inflate also 0.18 (same)
+1770cf0	486242	89.8	discard	orchid post-MD 3.5->4.0x (w/ inflate=0.18)
+615e2a9	486302	89.8	discard	orchid dt=1 1.3->1.4x (same)
+e7ab52b	486287	89.8	discard	orchid dt=1 1.3->1.5x
+6546ffd	486076	89.8	discard	spring boost end 150->160
+2e79d31	486286	89.8	discard	lily pre-Valentine dt=1 1.2x boost
+0a92fbd	486212	89.8	discard	winter holiday boost 1.05->1.06
+806c41d	486264	89.8	discard	winter holiday boost 1.05->1.04
+4931233	486094	89.8	discard	rose Mother's Day 1.5x boost
+423f185	485600	89.8	discard	EMA window 15->13
+10502e8	486287	89.8	discard	fallback weekend multiplier 1.4->1.35
+71e19e3	486296	89.8	discard	fallback weekend mult 1.4->1.45
+9fdb2b2	486047	89.8	discard	orchid EMA alpha 0.1->0.15
+8e30bfa	486317	89.8	keep	orchid EMA alpha 0.1->0.05
+306e915	486377	89.9	keep	orchid EMA alpha 0.05->0.0 (uniform)
+6df21ae	486482	89.9	keep	orchid EMA alpha 0.0->-0.05 (reverse)
+d9127c5	486542	89.9	keep	orchid EMA alpha -0.05->-0.1
+5219426	486362	89.9	discard	orchid EMA alpha -0.1->-0.2
+3183c54	486242	89.9	discard	orchid EMA alpha -0.1->-0.15
+66889d7	486452	89.9	discard	orchid EMA alpha -0.1->-0.12
+9a2590d	486544	89.9	keep	lily EMA alpha also -0.1
+244b977	486523	89.9	discard	lily EMA alpha -0.1->-0.05
+d3a0ec8	486572	89.9	keep	lily EMA alpha -0.1->0.0 (uniform)
+c108959	486539	89.9	discard	lily EMA alpha 0.0->0.05
+3877963	486340	89.9	discard	tulip EMA alpha 0.1->0.0
+3b36c7d	486556	89.9	discard	rose EMA alpha 0.1->0.05
+a553d21	486457	89.9	discard	rose EMA alpha 0.1->0.0
+3541599	486572	89.9	discard	orchid Valentine 2.4->2.5x (same)
+ba6f6bf	486602	89.9	keep	orchid Valentine 2.4->2.6x
+55b7b3d	486587	89.9	discard	orchid Valentine 2.6->2.7x
+1481991	486587	89.9	discard	orchid dt=1 1.3->1.4x
+845f31e	486632	89.9	keep	orchid post-Valentine dt=-1 1.2->1.3x
+9ce74bb	486632	89.9	discard	orchid dt=-1 1.3->1.4x (same)
+da71ace	486617	89.9	discard	orchid dt=-1 1.3->1.5x
+aa8f9fe	486617	89.9	discard	orchid post-MD 3.5->3.3x
+43f1f2f	486602	89.9	discard	orchid post-MD 3.5->3.7x
+529abb1	486632	89.9	discard	orchid post-MD dt=-4 (same)
+0d1e63f	486624	89.9	discard	lily Valentine 1.9->2.0x
+bb8d78e	486624	89.9	discard	tulip Valentine 3.8->3.9x
+137eed0	486617	89.9	discard	orchid post-MD 3.5->3.6x
+d6d0241	486602	89.9	discard	orchid post-MD dt=-2 1.2x boost
+20a191c	486527	89.9	discard	orchid EMA window 15->30
+3874053	486512	89.9	discard	orchid EMA window 15->20
+afb6aa0	486452	89.9	discard	orchid EMA window 15->12
+c8e0c42	486144	89.9	discard	tulip inflate 0.3->0.25
+27d829f	486702	89.9	keep	tulip inflate 0.3->0.35
+fc47ca8	486652	89.9	discard	tulip inflate 0.35->0.4
+3b46170	486688	89.9	discard	tulip inflate 0.35->0.38
+261886d	486680	89.9	discard	sunflower inflate 0.3->0.35
+75e5c6c	486543	89.9	discard	sunflower inflate 0.3->0.25
+9313a9c	486520	89.9	discard	tulip alpha 0.1->0.05
+456cef1	486660	89.9	discard	tulip alpha 0.1->0.15
+7db0a74	486700	89.9	discard	tulip Valentine 3.8->3.7x
+63206aa	488415	90.2	keep	rose pre-VD dt=1 4.3->4.4x
+5ffbfd8	488483	90.2	keep	tulip cold-start 24->22
+36f8c18	488492	90.2	keep	rose pre-VD dt=3 1.05x boost
+5dba601	488528	90.3	keep	rose pre-VD dt=4 1.1x boost
+f9d0b12	488558	90.3	keep	rose pre-VD dt=4 1.1->1.2x
+644569a	488584	90.3	keep	tulip pre-VD dt=4 1.1x boost
+07c8baf	488588	90.3	keep	tulip pre-VD dt=4 1.1->1.15x
+d39219b	488604	90.3	keep	add VD weekend to tulip EXCL (40-47)
+fba0312	488616	90.3	keep	add Friday to tulip EXCL (39-47)
+c463db1	488630	90.3	keep	extend tulip EXCL post-VD (39-48)
+d35e848	488676	90.3	keep	extend tulip EXCL post-VD to day 49
+25fd95a	488611	90.3	discard	expand rose EXCL to include dt=4 day (40-45)
+86d9b0f	488685	90.3	keep	extend rose EXCL post-VD to day 46 (41-46)
+daf8f2e	488695	90.3	keep	extend rose EXCL post-VD to day 47 (41-47)
+8f2dbbb	488697	90.3	keep	extend rose EXCL post-VD to day 48
+abcf215	488698	90.3	keep	extend rose EXCL post-VD to day 49
+8391d90	488682	90.3	discard	extend rose EXCL post-VD to day 50
+5812f86	488569	90.3	discard	add MD period to rose EXCL
+d5bb2d2	488660	90.3	discard	expand lily EXCL around VD (43-46)
+cfff16e	488700	90.3	keep	extend lily EXCL post-MD to day 135
+abb4ecc	488689	90.3	discard	extend lily EXCL post-MD to day 136
+80dfa2a	488685	90.3	discard	extend lily EXCL pre-MD to day 129
+e1596bf	488685	90.3	discard	extend orchid EXCL post-MD to day 138
+37883cc	488643	90.3	discard	rose inflate_k 0.3->0.25
+752cb50	488462	90.3	discard	rose alpha 0.1->0.0
+d578ff9	488652	90.3	discard	rose post-VD dt=-2 1.2x boost
+ed29046	488645	90.3	discard	add MD-1 to sunflower EXCL
+654516e	488172	90.3	discard	spring ramp 1.05->1.08
+89565e9	488307	90.3	discard	extend sunflower summer boost to day 165
+0475bc3	488632	90.3	discard	add lily MD-1 1.5x boost (Saturday before MD)
+a567697	488445	90.3	discard	orchid inflate_k 0.18->0.20
+01ab41e	488578	90.3	discard	sunflower inflate_k 0.3->0.25
+e6907b0	488687	90.3	discard	sunflower inflate_k 0.3->0.35
+479633b	488682	90.3	discard	tulip alpha 0.1->0.2
+387224a	488370	90.3	discard	add orchid MD dt=0 2.5x boost
+7afa03a	488568	90.3	discard	tulip inflate_k 0.35->0.30
+9cb6cd5	488650	90.3	discard	Thanksgiving boost 1.1->1.12
+bfec673	488685	90.3	discard	add orchid VD-2 1.1x boost
+68f8de8	488491	90.3	discard	reduce cold-start threshold 14->10
+dc33025	488685	90.3	discard	sunflower VD dt=0 1.3x boost
+e689569	488655	90.3	discard	add orchid MD+2 1.3x boost
+f197e55	488700	90.3	discard	lower grouped history min 3->2 (same profit)
+74d81b4	488560	90.3	discard	add MD+1 to rose EXCL
+b0b47db	488680	90.3	discard	add lily MD+2 1.2x boost
+08ab745	488445	90.3	discard	remove spring ramp from orchids
+92ed424	488694	90.3	discard	add MD+3 to tulip EXCL
+c786651	488686	90.3	discard	remove MD+2 from tulip EXCL
+a018110	488700	90.3	discard	product-specific inf_k in fallback (same profit)
+7d0f8a2	488531	90.3	discard	rose winter holiday boost 1.05->1.1
+0f710e1	488684	90.3	discard	add rose pre-VD dt=5 1.1x boost
+ff937be	488700	90.3	discard	extend orchid EXCL pre-MD to day 126 (same profit)
+c63c10b	488392	90.3	discard	split spring ramp early/late
+f323f92	488550	90.3	discard	orchid cold-start 9->10 (-150 confirmed)
+fb48123	488700	90.3	discard	orchid fallback weekend 1.4->1.2 (same profit)
+b6a69c1	488634	90.3	discard	extend tulip EXCL pre-VD to day 38
+94c05ad	488700	90.3	discard	fallback weekend 1.4->1.45 (same profit)
+b5e63a0	488527	90.3	discard	lily inflate_k 0.3->0.25
+6d8ddbe	488692	90.3	discard	rose pre-VD dt=2 1.05->1.1x
+a97f0c0	488666	90.3	discard	remove rose pre-VD dt=2 boost
+9b4e827	488676	90.3	discard	rose VD dt=1 4.4->4.5x
+27a67d1	488735	90.3	keep	add rose pre-MD dt=2 1.1x boost
+e7d4e6a	488722	90.3	discard	rose pre-MD dt=2 1.1->1.2x
+5f0f33b	488736	90.3	keep	add rose pre-MD dt=3 1.05x boost
+c04dbb4	488720	90.3	discard	add rose pre-MD dt=4 1.05x boost
+3d3f37a	488516	90.3	discard	add MD window to rose EXCL (-220)
+3942b12	488724	90.3	discard	add tulip pre-MD dt=2 1.1x boost
+2757055	488728	90.3	discard	add lily pre-MD dt=2 1.1x boost
+a1f5b13	488672	90.3	discard	add rose post-MD dt=-2 1.2x boost
+2187683	488722	90.3	discard	rose MD dt=3 1.05->1.08x
+3106bf5	488730	90.3	discard	sunflower pre-MD dt=2 1.1x boost
+b7a8a31	488696	90.3	discard	rose MD dt=1 1.2->1.3x
+5867279	488680	90.3	discard	rose MD dt=-1 2.6->2.8x
+38c45b0	488721	90.3	discard	add orchid pre-MD dt=3 1.1x boost
+fe13356	488688	90.3	discard	sunflower summer boost 1.9->1.7x
+1087acd	488572	90.3	discard	sunflower post-summer dampener 0.75->0.70
+a698030	486808	90.0	discard	lower inflate base 0.95 for non-orchids
+6ea2108	488724	90.3	discard	lily MD dt=-1 1.9->2.0x
+e95f550	488718	90.3	discard	lily MD dt=-1 1.9->1.8x
+dd3e044	488733	90.3	discard	sunflower MD dt=-1 1.6->1.7x
+7e6530b	488733	90.3	discard	sunflower MD dt=-1 1.6->1.65x
+6dec85a	488720	90.3	discard	add tulip pre-VD dt=3 1.1x boost
+4c93312	488721	90.3	discard	orchid VD boost 2.6->2.7x
+ae60b1c	488706	90.3	discard	orchid VD boost 2.6->2.5x
+58b9a2f	488728	90.3	discard	lily VD boost 1.9->2.0x
+5af5b02	487797	90.1	discard	history window 15->14
+69e0aba	488736	90.3	discard	rose VD 7.5->8.0x (same, floor binding)
+340df93	488696	90.3	discard	rose VD floor 220->225
+e55693a	488728	90.3	discard	add lily VD dt=1 1.1x boost
+48f763c	488423	90.3	discard	rose alpha 0.1->0.15
+c51cbb1	488646	90.3	discard	orchid Thanksgiving boost 1.1->1.15x
+8b4a289	488907	90.3	keep	add lily Christmas Eve boost 2.0x day 357
+ac32089	488995	90.3	keep	lily Christmas Eve boost 2.0->2.5x
+350af72	489106	90.4	keep	add lily pre-Christmas boost 1.3x days 353-356
+876a1e7	489130	90.4	keep	add sunflower post-boost taper 1.3x days 161-167
+5585abf	489195	90.4	keep	add Christmas week to lily EXCL
+1ff813f	489255	90.4	keep	add tulip post-VD dt=-1 1.3x boost
+28154cf	489358	90.4	keep	add rose pre-MD dt=6 1.7x boost
+e153e90	489428	90.5	keep	rose pre-MD dt=6 1.5->1.7x
+88bfadd	489469	90.5	keep	rose pre-MD dt=6 1.5->1.7x
+70e7406	489559	90.5	keep	add rose pre-MD dt=5 1.1x boost
+db11d2a	489665	90.5	keep	add lily post-VD dt=-4 1.5x boost
+9c8ce45	489690	90.5	keep	lily post-VD dt=-4 1.3->1.5x
+b8b716d	490094	90.6	keep	add St Patrick's Day boosts roses 1.5x day 75 tulips 1.5x day 76
+dde623c	490161	90.6	keep	rose cold-start 26->28
+c42e715	490168	90.6	keep	rose cold-start weekend 1.6->1.8x
+2fd294e	490208	90.6	keep	add rose pre-MD dt=8 1.2x boost
+2f480da	490229	90.6	keep	add Memorial Day weekend boost 1.3x roses+tulips days 145-146
+5289e9e	490385	90.6	keep	add rose pre-Christmas Saturday boost 1.3x day 341
+ad259b8	490663	90.7	keep	sunflower split boost 3.0x days 150-152 1.5x days 153-160
+cc47059	490672	90.7	keep	sunflower early boost 2.5->3.0x
+7bc67d1	490732	90.7	keep	add rose post-VD dampener 0.85x days 46-49
+9ba9528	490904	90.7	keep	add rose Sunday dampener 0.95x
+62e0c29	490904	90.7	keep	rose Sunday dampener 0.95->0.93
+1cc4497	490962	90.7	keep	add tulip post-VD dampener 0.85x
+9916ad6	490797	90.7	discard	add orchid Sunday boost 1.1x
+b43454f	490694	90.7	discard	rose inflate_k 0.3->0.33
+25fddac	490952	90.7	discard	tulip post-VD dampener 0.85->0.9
+408aca5	490958	90.7	discard	tulip post-VD dampener 0.85->0.8
+3ca592c	491067	90.7	keep	add orchid Christmas Eve boost 1.5x day 357
+7b7e098	491037	90.7	discard	orchid Christmas Eve 1.5->1.7
+0bf0ed3	491037	90.7	discard	orchid Christmas Eve 1.5->1.3
+adf804c	491014	90.7	discard	add rose Saturday dampener 0.97x
+1a7a1ca	490707	90.7	discard	add rose safety margin 1.02x
+ce2e379	491031	90.7	discard	sunflower day 150 3.0x days 151-152 2.0x
+f779546	491079	90.7	keep	sunflower day 150 3.0x days 151-152 2.5x
+f188120	491103	90.7	keep	sunflower day 150 3.0->3.5x
+423051e	491082	90.7	discard	sunflower day 150 3.5->4.0x
+f3de105	491101	90.7	discard	rose Sunday dampener 0.93->0.91x
+c0b5136	491031	90.7	discard	rose Sunday dampener 0.93->0.95x
+edccf10	491096	90.7	discard	add rose pre-MD dt=7 1.1x boost
+a7a2d1a	491087	90.7	discard	add rose pre-MD dt=4 1.05x boost
+ecc42b4	491058	90.7	discard	orchid Christmas Eve boost 1.5->1.8x
+482ea80	490998	90.7	discard	add orchid pre-Christmas 1.2x boost days 353-356
+085d043	491022	90.7	discard	add rose Saturday dampener 0.96x
+7d0c091	491034	90.7	discard	add lily Sunday dampener 0.95x
